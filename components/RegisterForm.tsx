@@ -2,12 +2,15 @@
 
 import Link from 'next/link'
 import { FC, useState } from 'react'
+import { useRouter } from 'next/navigation';
 
 export const RegisterForm: FC = () => {
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+
+    const router = useRouter()
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -17,7 +20,7 @@ export const RegisterForm: FC = () => {
         }
 
         try {
-            const res = await fetch("api/register", {
+            const res = await fetch("http://localhost:4001/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -34,6 +37,7 @@ export const RegisterForm: FC = () => {
             if (res.ok) {
                 const form = e.target as HTMLFormElement;
                 form.reset();
+                router.push("/")
             } else {
                 console.log("User registration failed");
             }

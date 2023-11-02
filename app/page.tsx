@@ -1,9 +1,10 @@
-import LoginForm from '@/components/LoginForm'
+import Homepage from '@/components/Homepage'
+
 
 export default function Home() {
   return (
     <main>
-      <LoginForm />
+      <Homepage />
     </main>
   )
 }

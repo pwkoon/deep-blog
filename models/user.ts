@@ -15,6 +15,6 @@ const userSchema = new Schema({
     }, 
 }, {timestamps: true});
 
-const User = models.User || mongoose.model("User", userSchema) //if user existed, retrieve, else create new user
+const User = models.User || mongoose.model("User", userSchema); //if user existed, retrieve, else create new user
 
 export default User;
