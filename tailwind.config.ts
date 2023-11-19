@@ -8,11 +8,17 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      backgroundImage: {
-        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic':
-          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      backgroundColor: {
+        'deep-blue': '#C2DEDC',
+        'deep-dark-blue': '#116A7B'
       },
+      colors: {
+        'font': '#116A7B'
+      },
+      fontFamily: {
+        'body': ['Bebas Neue'],
+        'display': ['Oswald'],
+      }
     },
   },
   plugins: [],

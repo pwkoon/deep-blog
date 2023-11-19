@@ -1,8 +1,9 @@
-import React from 'react'
 
 const Homepage = () => {
+
+//TRY HANDLE SUBMIT ON /POSTS HERE BY FETCHING DATA FROM BACKEND
   return (
-    <div>welcome to Deep Blog!</div>
+    <p>Hello</p>
   )
 }
 

@@ -1,9 +1,9 @@
 import React from 'react'
-import { UserInfo } from '@/components/UserInfo'
+import Board from '@/components/Board'
 
 const Dashboard = () => {
   return (
-    <UserInfo /> 
+    <Board />
   )
 }
 
