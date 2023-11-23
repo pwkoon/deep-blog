@@ -11,6 +11,12 @@ const Post = {
   content:""
 }
 
+const UserPost = {
+  id: "",
+  title: "",
+  content:""
+}
+
 const User = {
   email:"",
 }
@@ -27,6 +33,13 @@ export const Posts = atom([Post])
 export const usePost = () => {
   const [posts, setPosts] = useAtom(Posts);
   return { posts, setPosts }
+}
+
+export const UserPosts = atom([UserPost])
+
+export const useUserPost = () => {
+  const [userPosts, setUserPosts] = useAtom(UserPosts);
+  return { userPosts, setUserPosts }
 }
 
 export const currentUser = atom(User)

@@ -1,6 +1,5 @@
 "use client"
 
-// import { useTokenContext } from '@/context/TokenContext';
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
 import { FC, useState } from 'react'
@@ -16,7 +15,7 @@ const LoginForm: FC = () => {
     const { user, setUser } = useUser();
 
     const router = useRouter()
-
+    
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if ( !email || !password ) {
@@ -44,9 +43,19 @@ const LoginForm: FC = () => {
                     setUser({
                         email: data.user.email,
                     })
+                    console.log(data.user)
                 });
-                // router.push("/posts")
                 router.back()
+
+                // router.push("/posts")
+                // // Use the asPath variable to get the previous URL
+                // if (!history || !history.length) {
+                //     router.push('/');
+                // } else {
+                //     router.push(history[history.length - 1]);
+                // }
+
+                // router.back()
             } else {
                 setError("User login failed, reason: not valid user!");
             }

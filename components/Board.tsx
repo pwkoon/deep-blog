@@ -3,12 +3,14 @@
 import Link from 'next/link';
 import { useToken, useUser } from '../atom';
 import { useEffect } from 'react';
-import router from 'next/router';
+import { useRouter } from 'next/navigation';
 
 const Board = () => {
 
   const { token, setToken } = useToken();
   const { user } = useUser();
+
+  const router = useRouter();
 
   // const tokenStorage =  typeof window !== 'undefined' ?  JSON.parse(window.localStorage.getItem("token") || "") : null
   // const tokenStorage =  window.localStorage.getItem("token") 
@@ -29,7 +31,7 @@ const Board = () => {
       }
     };
     fetchTokenFromLocalStorage();
-  }, [])
+  }, [setToken])
 
 
   // const handleLogout = async (e: React.FormEvent<HTMLFormElement>) =>{
@@ -79,15 +81,15 @@ const Board = () => {
   return (
       <>
         <div className='bg-deep-blue h-screen'>
-          <div className='h-auto pt-8'>
-            <h1 className='font-mono text-xl p-4'>
+          <div className='h-auto pt-2'>
+            <h1 className='font-mono text-xl p-2'>
               Deep. Blog..
             </h1>
               { token?.accessToken.length === 0 ?
                 <p>Hello Guest</p> :
                 <p>Hello User</p> 
               }
-            <div className='pt-8'>
+            <div className='pt-2'>
               <p className='text-center w-1/4 border-solid p-7 bg-font text-white hover:bg-cyan-600 cursor-pointer' style={{margin:"auto"}}>
                 { token?.accessToken.length === 0 ?
                   <Link href="/login">See posts</Link> :
@@ -95,7 +97,15 @@ const Board = () => {
                 }
               </p>
             </div>
-            <div className='pt-8'>
+            <div className='pt-2'>
+              <p className='text-center w-1/4 border-solid p-7 bg-font text-white hover:bg-cyan-600 cursor-pointer' style={{margin:"auto"}}>
+                { token?.accessToken.length === 0 ?
+                  <Link href="/login">See your posts</Link> :
+                  <Link href="/userposts">See your posts</Link>
+                }
+              </p>
+            </div>
+            <div className='pt-2'>
               <p className='text-center w-1/4 border-solid p-7 bg-font text-white hover:bg-cyan-600 cursor-pointer' style={{margin:"auto"}}>
                 { token?.accessToken.length === 0 ?
                   <Link href="/login">Create posts</Link> :
@@ -103,12 +113,12 @@ const Board = () => {
                 }
               </p>
             </div>
-            <div className='pt-8'>
+            <div className='pt-2'>
               <p className='text-center w-1/4 border-solid p-7 bg-font text-white hover:bg-cyan-600 cursor-pointer' style={{margin:"auto"}}>
               <a href="/login">Login</a>
               </p>
             </div>
-            <div className='pt-8'>
+            <div className='pt-2'>
               <p className='text-center w-1/4 border-solid p-7 bg-font text-white hover:bg-cyan-600 cursor-pointer' style={{margin:"auto"}}>
               <Link href="/" onClick={handleLogout}>Logout</Link>
               </p>

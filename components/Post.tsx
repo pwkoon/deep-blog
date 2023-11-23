@@ -1,18 +1,14 @@
 "use client"
 
 import React, { useEffect } from 'react';
-import { usePost, useToken, useUser } from '../atom';
+import { usePost, useToken } from '../atom';
 import Link from 'next/link';
 
 const Posts = () => {
   const { posts, setPosts } = usePost();
   const { token } = useToken();
-  const { user } = useUser();
-
-  // if (typeof window !== 'undefined') {
-  //   window.localStorage.setItem("token", JSON.stringify(token))
-  // }
-
+  
+  // STORE TOKEN IN LOCAL STORAGE
   useEffect(() => {
     const setTokenInLocalStorage = () => {
       try {
@@ -27,6 +23,7 @@ const Posts = () => {
     setTokenInLocalStorage();
   }, [])
 
+  // STORE ALL POSTS IN LOCAL STORAGE
   useEffect(() => {
     const loadPostsFromLocalStorage = () => {
       const storedPosts = localStorage.getItem('posts');
@@ -64,16 +61,23 @@ const Posts = () => {
 
   return (
     <>
-      { posts.length ?     
-          posts.map(post => 
-            <div className='bg-deep-blue' key={post.id}>
-              <h2>{post.title}</h2>
-              <p>{post.content}</p>
-            </div>
-          ) :
-          <h1>No posts yet...</h1>
-      }
+      <div className='h-screen grid grid-cols-4 gap-4 p-3'>
+        { posts.length ?     
+            posts.map((post, index) =>  
+                <div className="p-3 max-w-sm rounded overflow-hidden shadow-lg" key={index}>
+                  {/* <img className="w-full" src="/img/card-top.jpg" alt="Sunset in the mountains" /> */}
+                  <div className="px-6 py-4">
+                    <div className="font-bold text-xl mb-2">{post.title}</div>
+                    <p className="text-gray-700 text-base">
+                      {post.content}
+                    </p>
+                  </div>
+                </div>
+            ) :
+            <h1>No posts yet...</h1>
+        }
       <Link href="/dashboard">Back home</Link>
+      </div>
     </>
   )
 }
