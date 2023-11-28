@@ -2,28 +2,28 @@
 
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation';
-import { usePost, usePostDetail, useSelectedPost, useToken } from '@/atom';
-import PostCard from '@/components/PostCard'
+import { usePostDetail, useSelectedPost, useToken, useUserPost } from '@/atom';
+import PostCard from '@/components/PostCard';
 import Link from 'next/link';
 
-const Posts = () => {
-  const router = useRouter()
+const UserPost = () => {
+  const router = useRouter();
 
-  const { posts, setPosts } = usePost();
+  const { userPosts, setUserPosts } = useUserPost();
   const { token } = useToken();
   const { setPostDetail } = usePostDetail();
   const { selectedPost, setSelectedPost } = useSelectedPost();
 
-// STORE ALL POSTS IN LOCAL STORAGE
+  // STORE USER POSTS IN LOCAL STORAGE
   useEffect(() => {
-    const loadPostsFromLocalStorage = () => {
-      const storedPosts = localStorage.getItem('posts');
-      return storedPosts ? JSON.parse(storedPosts) : null;
+    const loadUserPostsFromLocalStorage = () => {
+        const storedUserPosts = localStorage.getItem('userPosts');
+        return storedUserPosts ? JSON.parse(storedUserPosts) : null;
     };
 
-    const fetchAndSetPosts = async () => {
+    const fetchUserPosts = async() => {
       try {
-        const response = await fetch('http://localhost:4000/posts', {
+        const response = await fetch('http://localhost:4000/user/posts', {
           headers: {
             Authorization: token && token.accessToken ? `Bearer ${token.accessToken}` : '',
           },
@@ -32,24 +32,25 @@ const Posts = () => {
         if (!response.ok) {
           throw new Error('Failed to fetch posts');
         }
+
         const data = await response.json();
-        setPosts(data);
-        localStorage.setItem('posts', JSON.stringify(data));
+        setUserPosts(data);
+        localStorage.setItem('userPosts', JSON.stringify(data));
       } catch (error) {
         console.error('Error fetching posts:', error);
       }
     };
 
-    const storedPosts = loadPostsFromLocalStorage();
+    const storedUserPosts = loadUserPostsFromLocalStorage();
 
-    if (storedPosts) {
-      setPosts(storedPosts);
+    if (storedUserPosts) {
+        setUserPosts(storedUserPosts);
     } else {
-      fetchAndSetPosts();
+        fetchUserPosts();
     }
-  }, [setPosts, token]);
+  }, [setUserPosts, token])
 
-// STORE SINGLE POST IN LOCAL STORAGE
+  // STORE SINGLE POST IN LOCAL STORAGE
   const fetchSinglePost = async () => {
     try {
       const res = await fetch(`http://localhost:4000/posts/${selectedPost}`);
@@ -71,13 +72,13 @@ const Posts = () => {
     setSelectedPost(event.id)
     fetchSinglePost();
   }
-  
+
   return (
     <>
       <div className='grid grid-cols-4 gap-4 p-3'>
-        { posts.length ?  
-            posts.map((post) =>
-              <PostCard key={post.id} post={post} handleClick={handleClick} /> 
+        { userPosts.length ?  
+            userPosts.map((post,index) =>
+              <PostCard key={index} post={post} handleClick={handleClick} />  
             ) :
             <h1>No posts yet...</h1>
         }
@@ -87,4 +88,4 @@ const Posts = () => {
   )
 }
 
-export default Posts
+export default UserPost

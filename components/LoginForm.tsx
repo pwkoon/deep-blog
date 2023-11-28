@@ -2,8 +2,7 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation';
-import { FC, useState } from 'react'
-
+import { FC, useEffect, useState } from 'react'
 import { useToken, useUser } from '../atom';
 
 const LoginForm: FC = () => {
@@ -22,7 +21,6 @@ const LoginForm: FC = () => {
             setError("All fields are necessary!");
             return;
         }
-
         try {
             const res = await fetch("http://localhost:4001/login", {
                 method: "POST",
@@ -42,20 +40,10 @@ const LoginForm: FC = () => {
                     });
                     setUser({
                         email: data.user.email,
+                        username: data.user.username
                     })
-                    console.log(data.user)
                 });
                 router.back()
-
-                // router.push("/posts")
-                // // Use the asPath variable to get the previous URL
-                // if (!history || !history.length) {
-                //     router.push('/');
-                // } else {
-                //     router.push(history[history.length - 1]);
-                // }
-
-                // router.back()
             } else {
                 setError("User login failed, reason: not valid user!");
             }
@@ -64,6 +52,34 @@ const LoginForm: FC = () => {
         }
     }
 
+    // STORE TOKEN IN LOCAL STORAGE
+    useEffect(() => {
+        const setTokenInLocalStorage = () => {
+          try {
+            if (typeof window !== 'undefined') {
+              window.localStorage.setItem('user', JSON.stringify(user));
+            }
+          } catch (error) {
+            console.error('Error setting user in localStorage:', error);
+          }
+        };
+        setTokenInLocalStorage();
+      }, [user, setUser])
+    
+    // STORE USER IN LOCAL STORAGE
+    useEffect(() => {
+        const setTokenInLocalStorage = () => {
+          try {
+            if (typeof window !== 'undefined') {
+              window.localStorage.setItem('token', JSON.stringify(token));
+            }
+          } catch (error) {
+            console.error('Error setting token in localStorage:', error);
+          }
+        };
+        setTokenInLocalStorage();
+      }, [token, setToken])
+    
     return (
     <div className='grid place-items-center h-screen'>
         <div className='shadow-lg p-5 rounded-lg border-t-4 border-green-400'>

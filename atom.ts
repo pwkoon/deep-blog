@@ -18,8 +18,18 @@ const UserPost = {
 }
 
 const User = {
-  email:"",
+  username: "",
+  email:""
 }
+
+const SinglePost = {
+  id: "",
+  title: "",
+  content:""
+}
+
+const SelectedPost = ""
+
 
 export const tokenAtom = atom(Token);
 
@@ -47,4 +57,18 @@ export const currentUser = atom(User)
 export const useUser = () => {
   const [user, setUser] = useAtom(currentUser);
   return { user, setUser }
+}
+
+export const SelectedPostId = atom(SelectedPost)
+
+export const useSelectedPost = () => {
+  const [selectedPost, setSelectedPost] = useAtom(SelectedPostId);
+  return { selectedPost, setSelectedPost }
+}
+
+export const PostDetail = atom(SinglePost)
+
+export const usePostDetail = () => {
+  const [postDetail, setPostDetail] = useAtom(PostDetail);
+  return { postDetail, setPostDetail }
 }

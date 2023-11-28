@@ -1,20 +1,19 @@
 "use client"
 
+import React, { useState } from 'react'
+import { useRouter } from 'next/navigation';
 import { usePost, useToken } from '@/atom';
 import Link from 'next/link'
-import { useRouter } from 'next/navigation';
-import React, { useState } from 'react'
 
 const CreatePostForm = () => {
+    const router = useRouter();
+    
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [error, setError] = useState("");
 
     const { posts, setPosts } = usePost();
     const { token } = useToken();
-    console.log(token)
-
-    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -32,8 +31,7 @@ const CreatePostForm = () => {
                 },
                 body: JSON.stringify({
                     title,
-                    content,
-              
+                    content, 
                 }),
             });
             if (res.ok) {
