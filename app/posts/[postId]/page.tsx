@@ -1,25 +1,21 @@
 "use client";
 
-import { useRouter } from 'next/navigation';
+import { usePostDetail, useToken } from '@/atom';
 import PostDetail from '@/components/PostDetail';
 
 const PostId = () => {
-
-    const router = useRouter();
-
-    // RETRIEVE SINGLE POST FROM LOCAL STORAGE 
-    const loadSinglePostFromLocalStorage = () => {
+    const { postDetail, setPostDetail } = usePostDetail();
+    const { token } = useToken();
+     
+      const loadSinglePostFromLocalStorage = () => {
         const singlePost = localStorage.getItem('single post');
         return singlePost ? JSON.parse(singlePost) : null;
-    };
-
-    const singlePost = loadSinglePostFromLocalStorage();
+      };
+  
+      const singlePost = loadSinglePostFromLocalStorage();
 
     return (
-        <>
-            <PostDetail post={singlePost} />
-            <button onClick={() => router.back()}>Back</button>
-        </>
+        <PostDetail post={singlePost} />
     )
 }
 

@@ -1,5 +1,4 @@
-import Link from 'next/link'
-import React from 'react'
+import { useRouter } from 'next/navigation'
 
 type Props = {
     post: {
@@ -10,16 +9,24 @@ type Props = {
 }
 
 const Post = ({post}: Props) => {
-  return (
-    <>
-        <section className='p-4'>
-            <div>
-                <h1>{post.title}</h1>
-                <p>{post.content}</p>
-            </div>
-        </section>
-    </>
-  )
+
+    const router = useRouter();
+    const handleClick = () => {
+        localStorage.removeItem('single post')
+        router.back()
+    }
+
+    return (
+        <>
+            <section className='p-4'>
+                <div>
+                    <h1>{post.title}</h1>
+                    <p>{post.content}</p>
+                </div>
+                <button onClick={handleClick}>Back</button>
+            </section>
+        </>
+    )
 }
 
 export default Post

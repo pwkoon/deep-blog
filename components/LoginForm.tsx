@@ -81,24 +81,28 @@ const LoginForm: FC = () => {
       }, [token, setToken])
     
     return (
-    <div className='grid place-items-center h-screen'>
-        <div className='shadow-lg p-5 rounded-lg border-t-4 border-green-400'>
-            <h1 className='text-xl font-bold my-4'>Login</h1>
-            <form onSubmit={handleSubmit} className='flex flex-col gap-3'> 
-                <input onChange={(e) => setEmail(e.target.value)} type='text' placeholder='Email'/>
-                <input onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Password' />
-                <button className='bg-green-600 text-white font-bold cursor-pointer px-6 py-2'>Login</button>
-                { error && (
-                    <div className='bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2'>
-                        {error}
-                    </div>
-                    )
-                }
-                <Link className="text-sm mt-3 text-right" href={'/register'}>
-                    Dont have an account? <span className='underline'>Register</span>
-                </Link>
-            </form>
-        </div>
+    <div className='grid place-items-center h-screen bg-deep-login bg-fixed bg-cover bg-center'>
+      <Link className='font-mono text-font-blue' href={'/'}>
+        Deep.<br />
+        .. Blog
+      </Link>
+      <div className='shadow-lg p-5 rounded-lg border-t-4 border-font-blue'>
+          <h1 className='text-xl text-center text-white font-bold my-4'>Login</h1>
+          <form onSubmit={handleSubmit} className='flex flex-col gap-3 focus'> 
+              <input onChange={(e) => setEmail(e.target.value)} type='text' placeholder='Email'/>
+              <input onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Password' />
+              <button className='bg-font-blue text-white font-bold cursor-pointer px-6 py-2'>Login</button>
+              { error && (
+                  <div className='bg-red-500 text-white w-fit text-sm py-1 px-3 rounded-md mt-2'>
+                      {error}
+                  </div>
+                  )
+              }
+              <Link className="text-sm mt-3 text-right" href={'/register'}>
+                  Dont have an account? <span className='underline'>Register</span>
+              </Link>
+          </form>
+      </div>
     </div>
   )
 }
