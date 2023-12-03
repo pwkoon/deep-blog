@@ -87,7 +87,7 @@ const LoginForm: FC = () => {
         .. Blog
       </Link>
       <div className='shadow-lg p-5 rounded-lg border-t-4 border-font-blue'>
-          <h1 className='text-xl text-center text-white font-bold my-4'>Login</h1>
+          <h1 className='text-xl text-center text-font-sand font-bold my-4'>Login</h1>
           <form onSubmit={handleSubmit} className='flex flex-col gap-3 focus'> 
               <input onChange={(e) => setEmail(e.target.value)} type='text' placeholder='Email'/>
               <input onChange={(e) => setPassword(e.target.value)} type='password' placeholder='Password' />
@@ -98,7 +98,7 @@ const LoginForm: FC = () => {
                   </div>
                   )
               }
-              <Link className="text-sm mt-3 text-right" href={'/register'}>
+              <Link className="text-sm mt-3 text-right text-font-sand" href={'/register'}>
                   Dont have an account? <span className='underline'>Register</span>
               </Link>
           </form>

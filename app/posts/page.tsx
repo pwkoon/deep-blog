@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation';
-import { usePost, usePostDetail, useToken } from '@/atom';
+import { usePost, usePostDetail, usePostForm, useToken } from '@/atom';
 import PostCard from '@/components/PostCard'
 import Link from 'next/link';
 
@@ -11,6 +11,7 @@ const Posts = () => {
 
   const { posts, setPosts } = usePost();
   const { token, setToken } = useToken();
+  const { postForm, setPostForm } = usePostForm();
   const { setPostDetail } = usePostDetail();
 
   // retrieve token from localstorage
@@ -65,7 +66,7 @@ const Posts = () => {
     } else {
       fetchAndSetPosts();
     }
-  }, [setPosts, token]);
+  }, [setPosts, setPostForm, token]);
 
   const handleClick = async (event: any) => {
     console.log("from handleclick", event)

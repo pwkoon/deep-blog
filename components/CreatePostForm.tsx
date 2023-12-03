@@ -14,8 +14,6 @@ const CreatePostForm = () => {
     const { token } = useToken();
     const { userPosts, setUserPosts } = useUserPost();
 
-    console.log("posts", posts)
-
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if ( !postForm.title || !postForm.content ) {
@@ -36,14 +34,26 @@ const CreatePostForm = () => {
                 }),
             });
             if (res.ok) {
-                res.json().then(data => {
+                await res.json().then(data => {
                     setPostForm({...postForm, id: data.id})
-                    console.log("postForm", postForm)
                     posts.push(postForm)
                     userPosts.push(postForm)
                     setPosts(posts)
                     setUserPosts(userPosts)
+
+                    const storedPosts = localStorage.getItem('posts');
+                    const allPosts = storedPosts ? JSON.parse(storedPosts) : null;
+                    allPosts.push(postForm); 
+                    localStorage.setItem('posts', JSON.stringify(allPosts));
+
+                    const storedUserPosts = localStorage.getItem('userPosts');
+                    const allUserPosts = storedUserPosts ? JSON.parse(storedUserPosts) : null;
+                    allUserPosts.push(postForm)
+                    localStorage.setItem('userPosts', JSON.stringify(allUserPosts));
+
                 });
+                const form = e.target as HTMLFormElement;
+                form.reset();
                 router.push('/dashboard/userposts')
             } else {
                 setError("There must be some backend server error");
