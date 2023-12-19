@@ -4,10 +4,12 @@ type Props = {
       title: string,
       content: string
   },
-  handleClick: (post: any)=> void
+  handleClick: (post: any)=> void,
+  handleDelete: (post: any)=> void
 }
 
-const PostCard = ({post, handleClick}: Props) => {
+const PostCard = ({post, handleClick, handleDelete}: Props) => {
+
 
   return ( 
     <div className="bg-font-sand p-3 max-w-sm rounded overflow-hidden shadow-lg">
@@ -17,7 +19,9 @@ const PostCard = ({post, handleClick}: Props) => {
           {post.content}
         </p>
         <div className="text-center">
-          <button className="bg-deep-header p-3" onClick={() => handleClick && handleClick(post)}>Read more</button>
+          <button className="bg-deep-header p-3 m-2" onClick={() => handleClick && handleClick(post)}>Read more</button>
+          {/* Only the creator can delete the post */}
+          <button className="bg-button-delete text-white p-3" onClick={() => handleDelete && handleDelete(post)}>Delete</button>
         </div>
       </div>
     </div>

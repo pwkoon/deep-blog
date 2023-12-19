@@ -8,7 +8,7 @@ const Token = {
 const Post = {
   id: "",
   title: "",
-  content:""
+  content:"",
 }
 
 const UserPost = {
@@ -18,6 +18,7 @@ const UserPost = {
 }
 
 const User = {
+  id: "",
   username: "",
   email:""
 }
@@ -34,6 +35,18 @@ const CreatePost = {
   id: "",
   title: "",
   content: ""
+}
+
+const Delete = {
+  id: "",
+  title: "",
+  content: ""
+}
+
+export const DeletePost = atom(Delete);
+export const useDeletePost = () => {
+  const [deletePost, setDeletePost] = useAtom(DeletePost);
+  return { deletePost, setDeletePost }
 }
 
 

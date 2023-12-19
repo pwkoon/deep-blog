@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation';
-import { usePost, usePostDetail, usePostForm, useToken } from '@/atom';
+import { useDeletePost, usePost, usePostForm, useToken } from '@/atom';
 import PostCard from '@/components/PostCard'
 import Link from 'next/link';
 
@@ -12,7 +12,7 @@ const Posts = () => {
   const { posts, setPosts } = usePost();
   const { token, setToken } = useToken();
   const { postForm, setPostForm } = usePostForm();
-  const { setPostDetail } = usePostDetail();
+  const { deletePost, setDeletePost } = useDeletePost();
 
   // retrieve token from localstorage
   useEffect(() => {
@@ -32,6 +32,7 @@ const Posts = () => {
     fetchTokenFromLocalStorage();
   }, [])
 
+ 
   // STORE ALL POSTS IN LOCAL STORAGE
   useEffect(() => {
     const loadPostsFromLocalStorage = () => {
@@ -53,6 +54,7 @@ const Posts = () => {
 
         const data = await response.json();
         setPosts(data);
+        console.log("check data", data)
         localStorage.setItem('posts', JSON.stringify(data));
       } catch (error) {
         console.error('Error fetching posts:', error);
@@ -69,24 +71,68 @@ const Posts = () => {
   }, [setPosts, setPostForm, token]);
 
   const handleClick = async (event: any) => {
-    console.log("from handleclick", event)
-    setPostDetail(event)
+    // setPostDetail(event)
     localStorage.setItem('single post', JSON.stringify(event));
     router.push(`/posts/${event.id}`)
   }
+
+  const handleDelete = async (event: any) => {
+    console.log('from handleDelete', event.id)
+    
+    try {
+        const res = await fetch(`http://localhost:4000/posts/${event.id}`, {
+            method: "DELETE",
+            headers: {
+              "Authorization": token && token.accessToken ? `Bearer ${token.accessToken}` : '',
+            },
+          });
+          if (res.ok) {
+            await res.json().then(data => {
+              setDeletePost(data)
+
+               // Update state to remove the deleted post
+              const updatedPosts = posts.filter(post => post.id !== data.id);
+              setPosts(updatedPosts);
+
+              // Update localStorage to remove the deleted post
+              const storedAllPosts = localStorage.getItem('posts');
+              const allPosts = storedAllPosts ? JSON.parse(storedAllPosts) : null;
+  
+              if (storedAllPosts) {
+                const updatedLocalStoragePosts = allPosts.filter((post: any) => post.id !== data.id);
+                localStorage.setItem('posts', JSON.stringify(updatedLocalStoragePosts));
+              }
+
+              const storedPosts = localStorage.getItem('userPosts');
+              const userAllPosts = storedPosts ? JSON.parse(storedPosts) : null;
+  
+              if (userAllPosts) {
+                const updatedLocalStoragePosts = userAllPosts.filter((post: any) => post.id !== data.id);
+                localStorage.setItem('userPosts', JSON.stringify(updatedLocalStoragePosts));
+              }
+
+            })
+          }
+    } catch (error) {
+        console.log("Error during deleting post: ", error);
+    }
+  }
+
   
   return (
     <>
       <div className='p-10 bg-deep-header'>
         <h1 className='text-center font-mono' style={{fontSize:"2rem"}}>...ALL POSTS...</h1>
       </div>
-      <div className='bg-font-blue grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
-        { posts.length ?  
-            posts.map((post, index) =>
-              <PostCard key={index} post={post} handleClick={handleClick} /> 
-            ) :
-            <h1>No posts yet...</h1>
-        }
+      <div className='bg-font-blue h-auto'>
+        <div className='grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
+          { posts.length ?  
+              posts.map((post, index) =>
+                <PostCard key={index} post={post} handleClick={handleClick} handleDelete={handleDelete}/> 
+              ) :
+              <h1 className='mx-auto'>No posts yet...</h1>
+          }
+        </div>
       </div>
       <div className='p-5 bg-deep-header text-center'>
         <Link href="/dashboard" className='font-mono hover:outline-double'>...Back home...</Link>

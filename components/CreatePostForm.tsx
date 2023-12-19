@@ -35,6 +35,7 @@ const CreatePostForm = () => {
             });
             if (res.ok) {
                 await res.json().then(data => {
+                    console.log("from create form", data)
                     setPostForm({...postForm, id: data.id})
                     posts.push(postForm)
                     userPosts.push(postForm)
@@ -43,14 +44,17 @@ const CreatePostForm = () => {
 
                     const storedPosts = localStorage.getItem('posts');
                     const allPosts = storedPosts ? JSON.parse(storedPosts) : null;
-                    allPosts.push(postForm); 
+                    if (storedPosts && allPosts) {
+                        allPosts.push({...postForm, id: data.id}); 
+                    }
                     localStorage.setItem('posts', JSON.stringify(allPosts));
 
                     const storedUserPosts = localStorage.getItem('userPosts');
                     const allUserPosts = storedUserPosts ? JSON.parse(storedUserPosts) : null;
-                    allUserPosts.push(postForm)
+                    if (storedUserPosts && allUserPosts) {
+                        allUserPosts.push({...postForm, id: data.id})
+                    }
                     localStorage.setItem('userPosts', JSON.stringify(allUserPosts));
-
                 });
                 const form = e.target as HTMLFormElement;
                 form.reset();

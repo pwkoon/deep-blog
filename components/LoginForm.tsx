@@ -39,6 +39,7 @@ const LoginForm: FC = () => {
                         refreshToken: data.refreshToken
                     });
                     setUser({
+                        id: data.user.id,
                         email: data.user.email,
                         username: data.user.username
                     })

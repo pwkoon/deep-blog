@@ -8,6 +8,8 @@ const Board = () => {
   const { token, setToken } = useToken();
   const { user, setUser } = useUser();
 
+  console.log("from profile", user)
+
   // retrieve token from localstorage
   useEffect(() => {
     const fetchTokenFromLocalStorage = () => {
@@ -132,7 +134,7 @@ const Board = () => {
               </div>   
             </div>
           </div>
-          <div className='bg-font-blue h-auto p-6'>
+          <div className='bg-font-blue h-auto p-3'>
           </div>
           <div className='h-100 bg-fixed bg-center bg-cover bg-deep-turtle'>
             <div className='scroll-smooth grid grid-rows-2 grid-flow-col gap-4'>
