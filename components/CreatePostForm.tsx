@@ -1,71 +1,15 @@
 "use client"
 
-import React, { useState } from 'react'
-import { useRouter } from 'next/navigation';
-import { usePost, usePostForm, useToken, useUserPost } from '@/atom';
+import { usePostForm } from '@/atom';
 import Link from 'next/link'
 
-const CreatePostForm = () => {
-    const router = useRouter();
-    const [error, setError] = useState("");
+type Props = {
+    handleSubmit: (post: any)=> void
+}
 
-    const { postForm, setPostForm } = usePostForm();
-    const { posts, setPosts } = usePost();
-    const { token } = useToken();
-    const { userPosts, setUserPosts } = useUserPost();
+const CreatePostForm = ({handleSubmit}:Props) => {
 
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        if ( !postForm.title || !postForm.content ) {
-            setError("All fields are necessary!");
-            return;
-        }
-
-        try {
-            const res = await fetch("http://localhost:4000/posts", {
-                method: "POST",
-                headers: {
-                    "Authorization": token && token.accessToken ? `Bearer ${token.accessToken}` : '',
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    title: postForm.title,
-                    content: postForm.content, 
-                }),
-            });
-            if (res.ok) {
-                await res.json().then(data => {
-                    console.log("from create form", data)
-                    setPostForm({...postForm, id: data.id})
-                    posts.push(postForm)
-                    userPosts.push(postForm)
-                    setPosts(posts)
-                    setUserPosts(userPosts)
-
-                    const storedPosts = localStorage.getItem('posts');
-                    const allPosts = storedPosts ? JSON.parse(storedPosts) : null;
-                    if (storedPosts && allPosts) {
-                        allPosts.push({...postForm, id: data.id}); 
-                    }
-                    localStorage.setItem('posts', JSON.stringify(allPosts));
-
-                    const storedUserPosts = localStorage.getItem('userPosts');
-                    const allUserPosts = storedUserPosts ? JSON.parse(storedUserPosts) : null;
-                    if (storedUserPosts && allUserPosts) {
-                        allUserPosts.push({...postForm, id: data.id})
-                    }
-                    localStorage.setItem('userPosts', JSON.stringify(allUserPosts));
-                });
-                const form = e.target as HTMLFormElement;
-                form.reset();
-                router.push('/dashboard/userposts')
-            } else {
-                setError("There must be some backend server error");
-            }
-        } catch (error) {
-            console.log("Error during creating post: ", error);
-        }
-    }
+const { postForm, setPostForm } = usePostForm();
 
   return (
     <>
@@ -88,6 +32,10 @@ const CreatePostForm = () => {
                             <label htmlFor="content" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Content</label>
                                 <div className="mt-2">
                                     <textarea onChange={(e) => setPostForm({...postForm, content: e.target.value})} id="content" name="content" rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                                </div>
+                            <label htmlFor="photo" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Content</label>
+                                <div className="mt-2">
+                                    <input type="file" name="image" accept="image/*"/>
                                 </div>
                         </div>
                         <div className="mt-6 flex items-center justify-end gap-x-6">

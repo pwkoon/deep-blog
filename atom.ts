@@ -29,24 +29,23 @@ const SinglePost = {
   content:""
 }
 
-// const SelectedPost = ""
-
 const CreatePost = {
   id: "",
   title: "",
   content: ""
 }
 
-const Delete = {
+const UpdatePost = {
   id: "",
   title: "",
   content: ""
 }
 
-export const DeletePost = atom(Delete);
-export const useDeletePost = () => {
-  const [deletePost, setDeletePost] = useAtom(DeletePost);
-  return { deletePost, setDeletePost }
+
+export const EditPost = atom(UpdatePost);
+export const useEditPost = () => {
+  const [editPost, setEditPost] = useAtom(EditPost);
+  return { editPost, setEditPost }
 }
 
 

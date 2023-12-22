@@ -23,7 +23,8 @@ const config: Config = {
       colors: {
         'font-blue': '#116A7B',
         'font-sand': '#F4DFC8',
-        'button-delete': '#DC8686'
+        'button-delete': '#DC8686',
+        'button-edit': '#5F8670'
       },
       fontFamily: {
         'body': ['Bebas Neue'],

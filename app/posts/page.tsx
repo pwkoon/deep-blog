@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation';
-import { useDeletePost, usePost, usePostForm, useToken } from '@/atom';
+import { useEditPost, usePost, usePostForm, useToken } from '@/atom';
 import PostCard from '@/components/PostCard'
 import Link from 'next/link';
 
@@ -11,8 +11,8 @@ const Posts = () => {
 
   const { posts, setPosts } = usePost();
   const { token, setToken } = useToken();
-  const { postForm, setPostForm } = usePostForm();
-  const { deletePost, setDeletePost } = useDeletePost();
+  const { setPostForm } = usePostForm();
+  const { setEditPost } = useEditPost();
 
   // retrieve token from localstorage
   useEffect(() => {
@@ -32,7 +32,6 @@ const Posts = () => {
     fetchTokenFromLocalStorage();
   }, [])
 
- 
   // STORE ALL POSTS IN LOCAL STORAGE
   useEffect(() => {
     const loadPostsFromLocalStorage = () => {
@@ -71,14 +70,11 @@ const Posts = () => {
   }, [setPosts, setPostForm, token]);
 
   const handleClick = async (event: any) => {
-    // setPostDetail(event)
     localStorage.setItem('single post', JSON.stringify(event));
     router.push(`/posts/${event.id}`)
   }
 
   const handleDelete = async (event: any) => {
-    console.log('from handleDelete', event.id)
-    
     try {
         const res = await fetch(`http://localhost:4000/posts/${event.id}`, {
             method: "DELETE",
@@ -88,9 +84,7 @@ const Posts = () => {
           });
           if (res.ok) {
             await res.json().then(data => {
-              setDeletePost(data)
-
-               // Update state to remove the deleted post
+              // Update state to remove the deleted post
               const updatedPosts = posts.filter(post => post.id !== data.id);
               setPosts(updatedPosts);
 
@@ -117,7 +111,15 @@ const Posts = () => {
         console.log("Error during deleting post: ", error);
     }
   }
-
+  
+  const handleEdit = async(event: any) => {
+    setEditPost({
+      id: event.id,
+      title: event.title,
+      content: event.content
+    })
+    router.push('/update')
+  }
   
   return (
     <>
@@ -128,7 +130,7 @@ const Posts = () => {
         <div className='grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
           { posts.length ?  
               posts.map((post, index) =>
-                <PostCard key={index} post={post} handleClick={handleClick} handleDelete={handleDelete}/> 
+                <PostCard key={index} post={post} handleClick={handleClick} handleDelete={handleDelete} handleEdit={handleEdit}/> 
               ) :
               <h1 className='mx-auto'>No posts yet...</h1>
           }

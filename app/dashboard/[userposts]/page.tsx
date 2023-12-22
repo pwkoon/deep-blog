@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation';
-import { useDeletePost, usePostDetail, usePostForm, useToken, useUserPost } from '@/atom';
+import { useEditPost, usePostDetail, usePostForm, useToken, useUserPost } from '@/atom';
 import PostCard from '@/components/PostCard';
 import Link from 'next/link';
 
@@ -12,8 +12,8 @@ const UserPost = () => {
   const { userPosts, setUserPosts } = useUserPost();
   const { token, setToken } = useToken();
   const { setPostDetail } = usePostDetail();
-  const { postForm, setPostForm } = usePostForm();
-  const { deletePost, setDeletePost } = useDeletePost();
+  const { setPostForm } = usePostForm();
+  const { setEditPost } = useEditPost();
 
   // retrieve token from localstorage
   useEffect(() => {
@@ -76,9 +76,7 @@ const UserPost = () => {
     router.push(`/posts/${event.id}`)
   }
   
-  const handleDelete = async (event: any) => {
-    console.log('from handleDelete', event.id)
-    
+  const handleDelete = async (event: any) => {    
     try {
         const res = await fetch(`http://localhost:4000/posts/${event.id}`, {
             method: "DELETE",
@@ -88,8 +86,6 @@ const UserPost = () => {
         });
         if (res.ok) {
           await res.json().then(data => {
-            setDeletePost(data)
-
              // Update state to remove the deleted post
             const updatedPosts = userPosts.filter(post => post.id !== data.id);
             setUserPosts(updatedPosts);
@@ -117,6 +113,15 @@ const UserPost = () => {
     }
   }
 
+  const handleEdit = async(event: any) => {
+    setEditPost({
+      id: event.id,
+      title: event.title,
+      content: event.content
+    })
+    router.push('/update')
+  }
+  
   return (
     <>
       <div className='p-10 bg-deep-header'>
@@ -126,7 +131,7 @@ const UserPost = () => {
         <div className='grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
           { userPosts.length ?  
               userPosts.map((post,index) =>
-                <PostCard key={index} post={post} handleClick={handleClick} handleDelete={handleDelete}/>  
+                <PostCard key={index} post={post} handleClick={handleClick} handleDelete={handleDelete} handleEdit={handleEdit}/>  
               ) :
               <h1>No posts yet...</h1>
           }
