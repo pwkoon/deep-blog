@@ -9,12 +9,14 @@ const Post = {
   id: "",
   title: "",
   content:"",
+  photo: ""
 }
 
 const UserPost = {
   id: "",
   title: "",
-  content:""
+  content:"",
+  photo: ""
 }
 
 const User = {
@@ -26,19 +28,27 @@ const User = {
 const SinglePost = {
   id: "",
   title: "",
-  content:""
+  content:"",
+  photo: ""
 }
 
 const CreatePost = {
   id: "",
   title: "",
-  content: ""
+  content: "",
+  photo: ""
 }
 
 const UpdatePost = {
   id: "",
   title: "",
   content: ""
+}
+
+export const fileAtom = atom<File | null>(null);
+export const useFile = () => {
+  const [ file, setFile ] = useAtom(fileAtom);
+  return { file, setFile }
 }
 
 
@@ -72,12 +82,6 @@ export const useUser = () => {
   const [user, setUser] = useAtom(currentUser);
   return { user, setUser }
 }
-
-// export const SelectedPostId = atom(SelectedPost)
-// export const useSelectedPost = () => {
-//   const [selectedPost, setSelectedPost] = useAtom(SelectedPostId);
-//   return { selectedPost, setSelectedPost }
-// }
 
 export const PostDetail = atom(SinglePost)
 export const usePostDetail = () => {

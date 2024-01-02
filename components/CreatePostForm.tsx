@@ -1,7 +1,9 @@
 "use client"
 
-import { usePostForm } from '@/atom';
+import { useFile, usePostForm } from '@/atom';
+import { Niconne } from 'next/font/google';
 import Link from 'next/link'
+import { useState } from 'react';
 
 type Props = {
     handleSubmit: (post: any)=> void
@@ -10,6 +12,7 @@ type Props = {
 const CreatePostForm = ({handleSubmit}:Props) => {
 
 const { postForm, setPostForm } = usePostForm();
+const { file, setFile}  = useFile();
 
   return (
     <>
@@ -21,7 +24,7 @@ const { postForm, setPostForm } = usePostForm();
                     </div>
                 </section>
                 <div className='col-span row-span-3 pt-20'>
-                    <form onSubmit={handleSubmit}>
+                    <form onSubmit={handleSubmit} action="/posts" method="POST" encType="multipart/form-data">
                         <div className="sm:col-span-4">
                             <label htmlFor="title" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Title</label>
                                 <div className="mt-2">
@@ -35,7 +38,7 @@ const { postForm, setPostForm } = usePostForm();
                                 </div>
                             <label htmlFor="photo" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Content</label>
                                 <div className="mt-2">
-                                    <input type="file" name="image" accept="image/*"/>
+                                    <input type="file" onChange={(e) => setFile(!e.target.files ? null : e.target.files[0])} name="image" accept="image/*"/>
                                 </div>
                         </div>
                         <div className="mt-6 flex items-center justify-end gap-x-6">
@@ -43,9 +46,7 @@ const { postForm, setPostForm } = usePostForm();
                         </div>
                     </form>
                 </div>
-
             </div>
-
         </div>
         <div className='p-5 bg-deep-header text-center'>
             <Link href="/dashboard" className='font-mono hover:outline-double'>...Back home...</Link>

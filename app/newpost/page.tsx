@@ -3,35 +3,48 @@
 import CreatePostForm from '@/components/CreatePostForm'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { usePost, usePostForm, useToken, useUserPost } from '@/atom';
+import { useFile, usePost, usePostForm, useToken, useUserPost } from '@/atom';
 
 const CreatePost = () => {
   const router = useRouter();
   const [error, setError] = useState("");
 
+  const { file, setFile}  = useFile();
   const { postForm, setPostForm } = usePostForm();
+  
   const { posts, setPosts } = usePost();
   const { token } = useToken();
   const { userPosts, setUserPosts } = useUserPost();
 
+  const validFilesTypes = ['image/jpg','image/jpeg','image/png']
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
-      if ( !postForm.title || !postForm.content ) {
+      if ( !postForm.title || !postForm.content || !file ) {
           setError("All fields are necessary!");
           return;
       }
 
+      if (!validFilesTypes.find(type => type === file.type)) {
+        console.log("File must be in JPG/PNG format")
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("image", file)
+      console.log("file", file)
+      formData.append("title", postForm.title)
+      formData.append("content", postForm.content)
+
       try {
+
           const res = await fetch("http://localhost:4000/posts", {
               method: "POST",
               headers: {
                   "Authorization": token && token.accessToken ? `Bearer ${token.accessToken}` : '',
-                  "Content-Type": "application/json",
+                //   'Content-Type': 'multipart/form-data',
               },
-              body: JSON.stringify({
-                  title: postForm.title,
-                  content: postForm.content, 
-              }),
+              body: formData
           });
           if (res.ok) {
               await res.json().then(data => {

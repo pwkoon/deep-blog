@@ -1,8 +1,11 @@
+import Image from 'next/image' 
+
 type Props = {
   post: {
       id: string,
       title: string,
-      content: string
+      content: string,
+      photo: string
   },
   handleClick: (post: any)=> void,
   handleDelete: (post: any)=> void,
@@ -10,8 +13,17 @@ type Props = {
 }
 
 const PostCard = ({post, handleClick, handleDelete, handleEdit}: Props) => {
+  
   return ( 
     <div className="bg-font-sand p-3 max-w-sm rounded overflow-hidden shadow-lg">
+      {
+        post.photo ? 
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={post.photo} width="700" height="600" alt="post image"/>
+          // <Image src={post.photo} width={600} height={600} alt="post image"/>
+        :
+          <Image src="/jungle.jpg" width={600} height={600} alt="post image"/>
+      }      
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{post.title}</div>
         <p className="py-5">
