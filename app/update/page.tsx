@@ -8,7 +8,6 @@ import React, { useState } from 'react'
 const Update = () => {
 
     const router = useRouter();
-
     const { postForm } = usePostForm();
     const { token } = useToken();
     const [error, setError] = useState("");
@@ -38,13 +37,17 @@ const Update = () => {
                     localStorage.removeItem('userPosts');
                     localStorage.removeItem('posts')
                 })
+                // setEditPost({
+                //   id: "",
+                //   title: "",
+                //   content:""
+                // });
             };
-            router.back()
+            router.back()       
         } catch (error) {
             console.log("Error during creating post: ", error);
         }
     }
-
   return (
     <UpdatePostForm handleSubmit={handleSubmit} title={editPost.title} content={editPost.content} error={error}/>
   )

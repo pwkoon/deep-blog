@@ -1,27 +1,31 @@
+import { useEditPost, usePostForm } from '@/atom';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 interface QuillEditorProps {
-  value: string;
+  value: string,
   onChange: (value: string) => void;
 }
 
-const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
+const QuillEditor: React.FC<QuillEditorProps> = ({ onChange }) => {
+  const { postForm, setPostForm } = usePostForm();
+  const { editPost } = useEditPost();
   // Customize Quill modules and formats as needed
   const modules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
       ['blockquote', 'code-block'],
-      [{ header: 1 }, { header: 2 }],
+      // [{ header: 1 }, { header: 2 }],
       [{ list: 'ordered' }, { list: 'bullet' }],
       [{ script: 'sub' }, { script: 'super' }],
       [{ indent: '-1' }, { indent: '+1' }],
-      [{ direction: 'rtl' }],
-      [{ size: ['small', false, 'large', 'huge'] }],
+      // [{ direction: 'rtl' }],
+      // [{ size: ['small', false, 'large', 'huge'] }],
       [{ header: [1, 2, 3, 4, 5, 6, false] }],
-      [{ color: [] }, { background: [] }],
-      [{ font: [] }],
-      [{ align: [] }],
+      // [{ color: [] }, { background: [] }],
+      // [{ font: [] }],
+      // [{ align: [] }],
+      ['link'],
       ['clean'],
     ],
   };
@@ -29,9 +33,10 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ value, onChange }) => {
   return (
     <ReactQuill
       theme="snow"
-      value={value}
       onChange={onChange}
       modules={modules}
+      value={editPost.content}
+      placeholder={"Write something awesome..."}
     />
   );
 };

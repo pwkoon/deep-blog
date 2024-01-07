@@ -1,6 +1,6 @@
-import UserPost from '@/app/dashboard/[userposts]/page'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import parse from 'html-react-parser';
 
 type Props = {
     post: {
@@ -39,7 +39,7 @@ const Post = ({post}: Props) => {
                     <h1 className='text-6xl text-font-sand font-mono'>.. {post.title}..</h1>
                 </div>
                 <div className='text-white' style={{margin: '3rem 15rem', lineHeight: '1.8'}}>
-                    <p>{post.content}</p>
+                    <p>{parse(post.content)}</p>
                 </div>
             </section>
         </div>

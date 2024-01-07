@@ -2,7 +2,7 @@
 
 import { useFile, usePostForm } from '@/atom';
 import Link from 'next/link'
-import Editor from './QuillEditor';
+import QuillEditorCreate from './QuillEditorCreate';
 
 type Props = {
     handleSubmit: (post: any)=> void
@@ -11,7 +11,11 @@ type Props = {
 const CreatePostForm = ({handleSubmit}:Props) => {
 
 const { postForm, setPostForm } = usePostForm();
-const { file, setFile}  = useFile();
+const { setFile}  = useFile();
+
+const handleChange = (event: any) => {
+    setPostForm({...postForm, content: event})
+}
 
   return (
     <>
@@ -32,11 +36,13 @@ const { file, setFile}  = useFile();
                                     </div>
                                 </div>
                             <label htmlFor="content" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Content</label>
-                                {/* <Editor /> */}
-                                <div className="mt-2">
-                                    <textarea onChange={(e) => setPostForm({...postForm, content: e.target.value})} id="content" name="content" rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                                <div className='bg-white'>
+                                    <QuillEditorCreate value={postForm.content} onChange={handleChange} />
                                 </div>
-                            <label htmlFor="photo" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Content</label>
+                                {/* <div className="mt-2">
+                                    <textarea onChange={(e) => setPostForm({...postForm, content: e.target.value})} id="content" name="content" rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
+                                </div> */}
+                            <label htmlFor="photo" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Photo</label>
                                 <div className="mt-2">
                                     <input type="file" onChange={(e) => setFile(!e.target.files ? null : e.target.files[0])} name="image" accept="image/*"/>
                                 </div>

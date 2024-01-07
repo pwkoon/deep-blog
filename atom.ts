@@ -54,7 +54,6 @@ export const useFile = () => {
   return { file, setFile }
 }
 
-
 export const EditPost = atom(UpdatePost);
 export const useEditPost = () => {
   const [editPost, setEditPost] = useAtom(EditPost);

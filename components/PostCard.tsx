@@ -1,4 +1,5 @@
 import Image from 'next/image' 
+import parse from 'html-react-parser';
 
 type Props = {
   post: {
@@ -30,7 +31,7 @@ const PostCard = ({post, handleClick, handleDelete, handleEdit}: Props) => {
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{post.title}</div>
         <p className="py-5">
-          {post.content.slice(0,100)}...
+          {parse(post.content.slice(0,100))}...
         </p>
         <div className="text-center">
           <button className="bg-deep-header p-3 m-2" onClick={() => handleClick && handleClick(post)}>
