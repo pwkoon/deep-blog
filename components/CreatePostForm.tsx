@@ -1,9 +1,8 @@
 "use client"
 
 import { useFile, usePostForm } from '@/atom';
-import { Niconne } from 'next/font/google';
 import Link from 'next/link'
-import { useState } from 'react';
+import Editor from './QuillEditor';
 
 type Props = {
     handleSubmit: (post: any)=> void
@@ -33,6 +32,7 @@ const { file, setFile}  = useFile();
                                     </div>
                                 </div>
                             <label htmlFor="content" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Content</label>
+                                {/* <Editor /> */}
                                 <div className="mt-2">
                                     <textarea onChange={(e) => setPostForm({...postForm, content: e.target.value})} id="content" name="content" rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
                                 </div>

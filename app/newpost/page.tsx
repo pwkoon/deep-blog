@@ -3,7 +3,8 @@
 import CreatePostForm from '@/components/CreatePostForm'
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { useFile, usePost, usePostForm, useToken, useUserPost } from '@/atom';
+import { useFile, usePost, usePostForm, useToken, useUser, useUserPost } from '@/atom';
+
 
 const CreatePost = () => {
   const router = useRouter();
@@ -15,6 +16,7 @@ const CreatePost = () => {
   const { posts, setPosts } = usePost();
   const { token } = useToken();
   const { userPosts, setUserPosts } = useUserPost();
+  const { user, setUser } = useUser();
 
   const validFilesTypes = ['image/jpg','image/jpeg','image/png']
 
@@ -47,9 +49,9 @@ const CreatePost = () => {
               body: formData
           });
           if (res.ok) {
-              await res.json().then(data => {
+                await res.json().then(data => {
                   console.log("from create form", data)
-                  setPostForm({...postForm, id: data.id})
+                  setPostForm({...postForm, id: data.id, user: {username: user.username}})
                   posts.push(postForm)
                   userPosts.push(postForm)
                   setPosts(posts)
@@ -68,6 +70,7 @@ const CreatePost = () => {
                       allUserPosts.push({...postForm, id: data.id})
                   }
                   localStorage.setItem('userPosts', JSON.stringify(allUserPosts));
+                
               });
               const form = e.target as HTMLFormElement;
               form.reset();

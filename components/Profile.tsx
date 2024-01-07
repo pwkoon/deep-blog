@@ -8,8 +8,6 @@ const Board = () => {
   const { token, setToken } = useToken();
   const { user, setUser } = useUser();
 
-  console.log("from profile", user)
-
   // retrieve token from localstorage
   useEffect(() => {
     const fetchTokenFromLocalStorage = () => {
@@ -65,6 +63,40 @@ const Board = () => {
       console.log("Error during logout: ", error);
     }
   };
+
+  useEffect(() => {
+    const options = {
+      threshold: 0.25,
+  };
+    //trying intersection observer-1
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("animate__fadeInUp") 
+        }
+      })
+    }, options)
+  
+    observer.observe(document.getElementById("observer-1")!)
+  },[])
+
+  useEffect(() => {
+    const options = {
+      threshold: 0.25,
+  };
+    //trying intersection observer-2
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("animate__fadeInRight") 
+        }
+      })
+    }, options)
+  
+    observer.observe(document.getElementById("observer-2")!)
+  },[])
+
+
 
   //TRY HANDLE SUBMIT ON /POSTS HERE BY FETCHING DATA FROM BACKEND
   return (
@@ -138,25 +170,25 @@ const Board = () => {
           </div>
           <div className='h-100 bg-fixed bg-center bg-cover bg-deep-turtle'>
             <div className='scroll-smooth grid grid-rows-2 grid-flow-col gap-4'>
-              <div className='row-span-2 m-20 h-1/2'>
+              <div className='row-span-2 m-20 h-1/2 opacity-0 animate__animated' id='observer-1'>
                 <div className='text-center font-mono' style={{fontSize: "1.5rem"}}>
                   <p className='text-white'>.</p>
                   <p className='text-white'>.</p>
                   <p className='text-white'>.</p>
-                  <h1 className='text-white'>Create and customize posts effortlessly.</h1>
+                  <h1 className='text-white'><span className='bg-font-sand text-black'>Create</span> and customize posts effortlessly.</h1>
                   <p className='text-white'>.</p>
-                  <h1 className='text-white'>Connect with a community that shares your interests.</h1>
+                  <h1 className='text-white'>Connect with a community that <span className='bg-font-sand text-black'>shares</span> your interests.</h1>
                   <p className='text-white'>.</p>
-                  <h1 className='text-white'>Explore diverse content from our vibrant user base.</h1>
+                  <h1 className='text-white'>Explore <span className='bg-font-sand text-black'>diverse</span> content from our vibrant user base.</h1>
                   <p className='text-white'>.</p>
-                  <h1 className='text-white'>Prioritize privacy and security.</h1>
+                  <h1 className='text-white'>Prioritize privacy and <span className='bg-font-sand text-black'>security</span>.</h1>
                   <p className='text-white'>.</p>
                   <p className='text-white'>.</p>
                   <p className='text-white'>.</p>
                 </div>
               </div>
               <div className='col-row-2'>
-                <h1 className='font-mono p-10 text-font-sand' style={{fontSize: "6rem"}}>
+                <h1 className='font-mono p-10 text-font-sand opacity-0 animate__animated' id='observer-2' style={{fontSize: "6rem"}}>
                   About.<br />
                   .. US
                 </h1>

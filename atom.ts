@@ -9,14 +9,16 @@ const Post = {
   id: "",
   title: "",
   content:"",
-  photo: ""
+  photo: "",
+  user: {username:""}
 }
 
 const UserPost = {
   id: "",
   title: "",
   content:"",
-  photo: ""
+  photo: "",
+  user: {username:""}
 }
 
 const User = {
@@ -36,7 +38,8 @@ const CreatePost = {
   id: "",
   title: "",
   content: "",
-  photo: ""
+  photo: "",
+  user: {username:""}
 }
 
 const UpdatePost = {
