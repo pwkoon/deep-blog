@@ -5,7 +5,6 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation';
 import { useFile, usePost, usePostForm, useToken, useUser, useUserPost } from '@/atom';
 
-
 const CreatePost = () => {
   const router = useRouter();
   const [error, setError] = useState("");

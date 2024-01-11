@@ -11,11 +11,11 @@ const Update = () => {
     const { postForm } = usePostForm();
     const { token } = useToken();
     const [error, setError] = useState("");
-    const { editPost } = useEditPost();
+    const { editPost, setEditPost } = useEditPost();
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        if ( !postForm.title || !postForm.content ) {
+        if ( !editPost.title || !editPost.content ) {
             setError("All fields are necessary!");
             return;
         }
@@ -28,8 +28,8 @@ const Update = () => {
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                title: postForm.title,
-                content: postForm.content, 
+                title: editPost.title,
+                content: editPost.content, 
             }),
             });
             if (res.ok) {
@@ -37,13 +37,13 @@ const Update = () => {
                     localStorage.removeItem('userPosts');
                     localStorage.removeItem('posts')
                 })
-                // setEditPost({
-                //   id: "",
-                //   title: "",
-                //   content:""
-                // });
-            };
-            router.back()       
+              };
+              // setEditPost({
+              //   id: "",
+              //   title: "",
+              //   content:""
+              // });
+              router.back()       
         } catch (error) {
             console.log("Error during creating post: ", error);
         }

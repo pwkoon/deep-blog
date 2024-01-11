@@ -2,7 +2,7 @@
 
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation';
-import { useEditPost, usePost, usePostForm, useToken } from '@/atom';
+import { useEditPost, usePost, usePostForm, useToken, useUser } from '@/atom';
 import PostCard from '@/components/PostCard'
 import Link from 'next/link';
 
@@ -13,6 +13,7 @@ const Posts = () => {
   const { token, setToken } = useToken();
   const { setPostForm } = usePostForm();
   const { setEditPost } = useEditPost();
+  const { user } = useUser();
 
   // retrieve token from localstorage
   useEffect(() => {
@@ -116,7 +117,9 @@ const Posts = () => {
     setEditPost({
       id: event.id,
       title: event.title,
-      content: event.content
+      content: event.content,
+      created_at: event.created_at,
+      updated_at: event.updated_at
     })
     router.push('/update')
   }
@@ -130,7 +133,7 @@ const Posts = () => {
         <div className='grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
           { posts.length ?  
               posts.map((post, index) =>
-                <PostCard key={index} post={post} handleClick={handleClick} handleDelete={handleDelete} handleEdit={handleEdit}/> 
+                <PostCard key={index} post={post} handleClick={handleClick} username={user.username} handleDelete={handleDelete} handleEdit={handleEdit}/> 
               ) :
               <h1 className='mx-auto'>No posts yet...</h1>
           }

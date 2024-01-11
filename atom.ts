@@ -10,6 +10,8 @@ const Post = {
   title: "",
   content:"",
   photo: "",
+  created_at: "",
+  updated_at: "",
   user: {username:""}
 }
 
@@ -18,6 +20,8 @@ const UserPost = {
   title: "",
   content:"",
   photo: "",
+  created_at: "",
+  updated_at: "",
   user: {username:""}
 }
 
@@ -31,7 +35,10 @@ const SinglePost = {
   id: "",
   title: "",
   content:"",
-  photo: ""
+  photo: "",
+  created_at: "",
+  updated_at: "",
+  user: {username:""}
 }
 
 const CreatePost = {
@@ -39,13 +46,17 @@ const CreatePost = {
   title: "",
   content: "",
   photo: "",
+  created_at: "",
+  updated_at: "",
   user: {username:""}
 }
 
 const UpdatePost = {
   id: "",
   title: "",
-  content: ""
+  content: "",
+  created_at: "",
+  updated_at: ""
 }
 
 export const fileAtom = atom<File | null>(null);

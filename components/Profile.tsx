@@ -88,15 +88,13 @@ const Board = () => {
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add("animate__fadeInRight") 
+          entry.target.classList.add("animate__fadeInUp") 
         }
       })
     }, options)
   
     observer.observe(document.getElementById("observer-2")!)
   },[])
-
-
 
   //TRY HANDLE SUBMIT ON /POSTS HERE BY FETCHING DATA FROM BACKEND
   return (
@@ -188,7 +186,7 @@ const Board = () => {
                 </div>
               </div>
               <div className='col-row-2'>
-                <h1 className='font-mono p-10 text-font-sand opacity-0 animate__animated' id='observer-2' style={{fontSize: "6rem"}}>
+                <h1 className='font-mono p-10 text-font-sand animate__animated' id='observer-2' style={{fontSize: "6rem"}}>
                   About.<br />
                   .. US
                 </h1>

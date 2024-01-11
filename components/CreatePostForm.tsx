@@ -21,7 +21,7 @@ const handleChange = (event: any) => {
     <>
         <div className='p-20 bg-font-blue'>
             <div className='grid grid-rows-3 grid-flow-col gap-4'>
-                <section className='m-auto row-span-3 h-screen bg-fixed bg-right bg-cover bg-deep-safari'>
+                <section className='lg:block sm:hidden m-auto row-span-3 h-screen bg-fixed bg-right bg-cover bg-deep-safari'>
                     <div className='p-20'>
                         <h1 className='text-center font-mono' style={{fontSize:"2rem"}}>...Create POST...</h1>
                     </div>
@@ -37,7 +37,7 @@ const handleChange = (event: any) => {
                                 </div>
                             <label htmlFor="content" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Content</label>
                                 <div className='bg-white'>
-                                    <QuillEditorCreate value={postForm.content} onChange={handleChange} />
+                                    <QuillEditorCreate onChange={handleChange} />
                                 </div>
                                 {/* <div className="mt-2">
                                     <textarea onChange={(e) => setPostForm({...postForm, content: e.target.value})} id="content" name="content" rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>

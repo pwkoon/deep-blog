@@ -1,15 +1,17 @@
 import { useEditPost, usePostForm } from '@/atom';
-import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
+// import dynamic from "next/dynamic";
+// const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface QuillEditorProps {
   value: string,
   onChange: (value: string) => void;
 }
 
-const QuillEditor: React.FC<QuillEditorProps> = ({ onChange }) => {
+const QuillEditorUpdate: React.FC<QuillEditorProps> = ({ value, onChange }) => {
   const { postForm, setPostForm } = usePostForm();
-  const { editPost } = useEditPost();
+  const { editPost, setEditPost } = useEditPost();
   // Customize Quill modules and formats as needed
   const modules = {
     toolbar: [
@@ -41,4 +43,4 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ onChange }) => {
   );
 };
 
-export default QuillEditor;
+export default QuillEditorUpdate;

@@ -1,13 +1,15 @@
 import { usePostForm } from '@/atom';
-import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import ReactQuill from 'react-quill';
+// import dynamic from "next/dynamic";
+// const ReactQuill = dynamic(() => import("react-quill"), { ssr: false });
 
 interface QuillEditorProps {
-  value: string,
+  // value: string,
   onChange: (value: string) => void;
 }
 
-const QuillEditor: React.FC<QuillEditorProps> = ({ onChange }) => {
+const QuillEditorCreate: React.FC<QuillEditorProps> = ({ onChange }) => {
   const { postForm, setPostForm } = usePostForm();
   // Customize Quill modules and formats as needed
   const modules = {
@@ -34,10 +36,10 @@ const QuillEditor: React.FC<QuillEditorProps> = ({ onChange }) => {
       theme="snow"
       onChange={onChange}
       modules={modules}
-      value={postForm.content}
+      // value={postForm.content}
       placeholder={"Write something awesome..."}
     />
   );
 };
 
-export default QuillEditor;
+export default QuillEditorCreate;

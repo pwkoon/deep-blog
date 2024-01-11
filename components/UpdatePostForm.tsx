@@ -1,4 +1,4 @@
-import { useEditPost, usePostForm } from '@/atom'
+import { useEditPost } from '@/atom'
 import Link from 'next/link'
 import React from 'react'
 import QuillEditorUpdate from './QuillEditorUpdate';
@@ -12,10 +12,10 @@ type Props = {
 
 const UpdatePostForm = ({title, content, error, handleSubmit}:Props) => {
 
-  const { postForm, setPostForm } = usePostForm();
+  const { editPost, setEditPost } = useEditPost();
 
   const handleChange = (event: any) => {
-    setPostForm({...postForm, content: event})
+    setEditPost({...editPost, content: event})
 }
 
   return (
@@ -33,12 +33,12 @@ const UpdatePostForm = ({title, content, error, handleSubmit}:Props) => {
                         <label htmlFor="title" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Title</label>
                             <div className="mt-2">
                                 <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md">
-                                    <input onChange={(e) => setPostForm({...postForm, title: e.target.value})} defaultValue={title} type="text" name="title" id="title" autoComplete="title" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder=" Next js..." />
+                                    <input onChange={(e) => setEditPost({...editPost, title: e.target.value})} defaultValue={title} type="text" name="title" id="title" autoComplete="title" className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder=" Next js..." />
                                 </div>
                             </div>
                         <label htmlFor="content" className="block text-sm font-medium leading-6 text-font-sand p-2 text-center">Content</label>
                             <div className='bg-white'>
-                                <QuillEditorUpdate value={content} onChange={handleChange} />
+                                <QuillEditorUpdate value={editPost.content} onChange={handleChange} />
                             </div>
                             {/* <div className="mt-2">
                                 <textarea onChange={(e) => setPostForm({...postForm,content: e.target.value})} defaultValue={content} id="content" name="content" rows={3} className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"></textarea>
