@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useEditPost, usePostDetail, usePostForm, useToken, useUser, useUserPost } from '@/atom';
 import PostCard from '@/components/PostCard';
 import Link from 'next/link';
+import Loading from '@/components/Loading';
+// import withAuth from '@/utils/withAuth';
 
 const UserPost = () => {
   const router = useRouter();
@@ -50,7 +52,8 @@ const UserPost = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch posts');
+          router.push('/login')
+          // throw new Error('Failed to fetch posts');
         }
 
         const data = await response.json();
@@ -85,7 +88,9 @@ const UserPost = () => {
               "Authorization": token && token.accessToken ? `Bearer ${token.accessToken}` : '',
             },
         });
-        if (res.ok) {
+        if (!res.ok) {
+          router.push('/login')
+        } else {
           await res.json().then(data => {
              // Update state to remove the deleted post
             const updatedPosts = userPosts.filter(post => post.id !== data.id);
@@ -127,22 +132,28 @@ const UserPost = () => {
   
   return (
     <>
-      <div className='p-10 bg-deep-header'>
-        <h1 className='text-center font-mono' style={{fontSize:"2rem"}}>...YOUR POSTS...</h1>
-      </div>
-      <div className='bg-font-blue h-auto'>
-        <div className='grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
-          { userPosts.length ?  
-              userPosts.map((post,index) =>
-                <PostCard key={index} post={post} username={user.username} handleClick={handleClick} handleDelete={handleDelete} handleEdit={handleEdit}/>  
-              ) :
-              <h1>No posts yet...</h1>
-          }
+      { token.accessToken ? 
+        <>
+        <div className='p-10 bg-deep-header'>
+          <h1 className='text-center font-mono' style={{fontSize:"2rem"}}>...YOUR POSTS...</h1>
         </div>
-      </div>
-      <div className='p-5 bg-deep-header text-center'>
-        <Link href="/dashboard" className='font-mono hover:outline-double'>...Back home...</Link>
-      </div>
+        <div className='bg-font-blue h-100'>
+          <div className='grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
+            { userPosts.length ?  
+                userPosts.map((post,index) =>
+                  <PostCard key={index} post={post} username={user.username} handleClick={handleClick} handleDelete={handleDelete} handleEdit={handleEdit}/>  
+                ) :
+                <h1>No posts yet...</h1>
+            }
+          </div>
+        </div>
+        <div className='p-5 bg-deep-header text-center'>
+          <Link href="/dashboard" className='font-mono hover:outline-double'>...Back home...</Link>
+        </div> 
+        </> 
+        :
+        <Loading />    
+      }
     </>
   )
 }

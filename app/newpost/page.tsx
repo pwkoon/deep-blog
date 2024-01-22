@@ -1,21 +1,41 @@
 "use client"
 
 import CreatePostForm from '@/components/CreatePostForm'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation';
-import { useFile, usePost, usePostForm, useToken, useUser, useUserPost } from '@/atom';
+import { useFile, usePost, usePostForm, useToken, useUserPost } from '@/atom';
+import withAuth from '@/utils/withAuth';
+import Loading from '@/components/Loading';
 
 const CreatePost = () => {
+    
   const router = useRouter();
   const [error, setError] = useState("");
-
   const { file, setFile}  = useFile();
   const { postForm, setPostForm } = usePostForm();
-  
   const { posts, setPosts } = usePost();
-  const { token } = useToken();
+  const { token, setToken } = useToken();
   const { userPosts, setUserPosts } = useUserPost();
-  const { user, setUser } = useUser();
+
+  
+  // retrieve token from localstorage
+  useEffect(() => {
+    const fetchTokenFromLocalStorage = () => {
+      try {
+        if (typeof window !== 'undefined') {
+          const tokenStorage = window.localStorage.getItem('token') || '';
+          if (tokenStorage) {
+            const parsedToken = JSON.parse(tokenStorage);
+            setToken(parsedToken);
+          }
+        }
+      } catch (error) {
+        console.error('Error parsing token from localStorage:', error);
+        router.push('/login');
+      }
+    };
+    fetchTokenFromLocalStorage();
+  }, [])
 
   const validFilesTypes = ['image/jpg','image/jpeg','image/png']
 
@@ -33,12 +53,11 @@ const CreatePost = () => {
 
       const formData = new FormData();
       formData.append("image", file)
-      console.log("file", file)
+      console.log("image file", file)
       formData.append("title", postForm.title)
       formData.append("content", postForm.content)
 
       try {
-
           const res = await fetch("http://localhost:4000/posts", {
               method: "POST",
               headers: {
@@ -47,44 +66,53 @@ const CreatePost = () => {
               },
               body: formData
           });
-          if (res.ok) {
-                await res.json().then(data => {
-                  console.log("from create form", data)
-                  setPostForm({...postForm, id: data.id, user: {username: user.username}})
-                  posts.push(postForm)
-                  userPosts.push(postForm)
-                  setPosts(posts)
-                  setUserPosts(userPosts)
 
-                  const storedPosts = localStorage.getItem('posts');
-                  const allPosts = storedPosts ? JSON.parse(storedPosts) : null;
-                  if (storedPosts && allPosts) {
-                      allPosts.push({...postForm, id: data.id}); 
-                  }
-                  localStorage.setItem('posts', JSON.stringify(allPosts));
-
-                  const storedUserPosts = localStorage.getItem('userPosts');
-                  const allUserPosts = storedUserPosts ? JSON.parse(storedUserPosts) : null;
-                  if (storedUserPosts && allUserPosts) {
-                      allUserPosts.push({...postForm, id: data.id})
-                  }
-                  localStorage.setItem('userPosts', JSON.stringify(allUserPosts));
-                
-              });
-              const form = e.target as HTMLFormElement;
-              form.reset();
-              router.push('/dashboard/userposts')
+          if (!res.ok) {
+            // router.push('/login')
+            console.log("error")
           } else {
-              setError("There must be some backend server error");
-          }
+                await res.json().then(data => {
+
+                // setPostForm({...postForm, id: data.id, user: {username: user.username}})
+                setPostForm(data)
+                console.log("from create form postform", postForm)
+                posts.push(postForm)
+                userPosts.push(postForm)
+                setPosts(posts)
+                setUserPosts(userPosts)
+    
+                const storedPosts = localStorage.getItem('posts');
+                const allPosts = storedPosts ? JSON.parse(storedPosts) : null;
+                if (storedPosts && allPosts) {
+                    allPosts.push(postForm); 
+                }
+                localStorage.setItem('posts', JSON.stringify(allPosts));
+    
+                const storedUserPosts = localStorage.getItem('userPosts');
+                const allUserPosts = storedUserPosts ? JSON.parse(storedUserPosts) : null;
+                if (storedUserPosts && allUserPosts) {
+                    allUserPosts.push(postForm)
+                }
+                localStorage.setItem('userPosts', JSON.stringify(allUserPosts));
+              
+            });
+            const form = e.target as HTMLFormElement;
+            form.reset();
+            router.push('/dashboard/userposts')
+        } 
       } catch (error) {
           console.log("Error during creating post: ", error);
       }
   }
 
   return (
-    <CreatePostForm handleSubmit={handleSubmit}/>
+    <>
+      { token.accessToken ? 
+        <CreatePostForm handleSubmit={handleSubmit}/> :
+        <Loading />
+      }
+    </>
   )
 }
 
-export default CreatePost
+export default withAuth(CreatePost)

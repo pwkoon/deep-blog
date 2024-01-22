@@ -6,10 +6,10 @@ import { FC, useEffect, useState } from 'react'
 import { useToken, useUser } from '../atom';
 
 const LoginForm: FC = () => {
+  
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-
     const { token, setToken } = useToken();
     const { user, setUser } = useUser();
 
@@ -44,7 +44,7 @@ const LoginForm: FC = () => {
                         username: data.user.username
                     })
                 });
-                router.back()
+                router.push('/dashboard')
             } else {
                 setError("User login failed, reason: not valid user!");
             }

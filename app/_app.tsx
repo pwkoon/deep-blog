@@ -3,6 +3,7 @@ import { Provider } from 'jotai';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
+
   return (
     <Provider>
       <Component {...pageProps} />
@@ -11,3 +12,4 @@ function MyApp({ Component, pageProps }: AppProps) {
 }
 
 export default MyApp;
+

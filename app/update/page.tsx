@@ -1,6 +1,6 @@
 "use client"
 
-import { useEditPost, usePostForm, useToken } from '@/atom';
+import { useEditPost, useToken } from '@/atom';
 import UpdatePostForm from '@/components/UpdatePostForm'
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react'
@@ -8,7 +8,6 @@ import React, { useState } from 'react'
 const Update = () => {
 
     const router = useRouter();
-    const { postForm } = usePostForm();
     const { token } = useToken();
     const [error, setError] = useState("");
     const { editPost, setEditPost } = useEditPost();
@@ -36,13 +35,16 @@ const Update = () => {
                 await res.json().then(data => {
                     localStorage.removeItem('userPosts');
                     localStorage.removeItem('posts')
+                    setEditPost({...editPost, 
+                      title: data.title,
+                      content: data.content,
+                      created_at: data.created_at,
+                      updated_at: data.updated_at
+                    });
                 })
               };
-              // setEditPost({
-              //   id: "",
-              //   title: "",
-              //   content:""
-              // });
+              localStorage.removeItem('single post')
+              localStorage.setItem('single post', JSON.stringify(editPost))
               router.back()       
         } catch (error) {
             console.log("Error during creating post: ", error);

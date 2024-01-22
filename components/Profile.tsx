@@ -125,7 +125,7 @@ const Board = () => {
                 </div>
               </div>    
               <div className='col-row-2 mx-auto'>
-                <div>
+                <div className='p-10'>
                   <div className='p-5'>
                     <p className='text-center border-solid rounded-3xl p-10 bg-font-blue text-white hover:bg-cyan-600 cursor-pointer'>
                       { token?.accessToken.length === 0 ?
@@ -150,16 +150,19 @@ const Board = () => {
                       }
                     </p>
                   </div>
-                  <div className='p-5'>
-                    <p className='text-center border-solid p-10 rounded-3xl bg-font-blue text-white hover:bg-cyan-600 cursor-pointer'>
-                    <a href="/login">Login</a>
-                    </p>
-                  </div>
-                  <div className='p-5'>
-                    <p className='text-center border-solid p-10 rounded-3xl bg-font-blue text-white hover:bg-cyan-600 cursor-pointer'>
-                    <Link href="/" onClick={handleLogout}>Logout</Link>
-                    </p>
-                  </div>
+                  {
+                    token.accessToken ?
+                      <div className='p-5'>
+                        <p className='text-center border-solid p-10 rounded-3xl bg-font-blue text-white hover:bg-cyan-600 cursor-pointer'>
+                        <Link href="/" onClick={handleLogout}>Logout</Link>
+                        </p>
+                      </div> :
+                      <div className='p-5'>
+                        <p className='text-center border-solid p-10 rounded-3xl bg-font-blue text-white hover:bg-cyan-600 cursor-pointer'>
+                        <a href="/login">Login</a>
+                        </p>
+                      </div>
+                  }
                 </div>
               </div>   
             </div>

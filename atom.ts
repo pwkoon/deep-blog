@@ -55,8 +55,10 @@ const UpdatePost = {
   id: "",
   title: "",
   content: "",
+  photo: "",
   created_at: "",
-  updated_at: ""
+  updated_at: "",
+  user: {username:""}
 }
 
 export const fileAtom = atom<File | null>(null);

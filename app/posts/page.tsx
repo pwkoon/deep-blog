@@ -1,19 +1,25 @@
 "use client"
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEditPost, usePost, usePostForm, useToken, useUser } from '@/atom';
 import PostCard from '@/components/PostCard'
-import Link from 'next/link';
+import { Alert } from '@material-tailwind/react';
+import Loading from '@/components/Loading';
+// import withAuth from '@/utils/withAuth';
 
 const Posts = () => {
+  
   const router = useRouter()
-
+  
   const { posts, setPosts } = usePost();
   const { token, setToken } = useToken();
   const { setPostForm } = usePostForm();
   const { setEditPost } = useEditPost();
   const { user } = useUser();
+  
+  // const [open, setOpen] = useState(false)
 
   // retrieve token from localstorage
   useEffect(() => {
@@ -28,6 +34,7 @@ const Posts = () => {
         }
       } catch (error) {
         console.error('Error parsing token from localStorage:', error);
+        router.push('/login');
       }
     };
     fetchTokenFromLocalStorage();
@@ -49,7 +56,8 @@ const Posts = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch posts');
+          // throw new Error('Failed to fetch posts');
+          router.push('/login')
         }
 
         const data = await response.json();
@@ -75,73 +83,86 @@ const Posts = () => {
     router.push(`/posts/${event.id}`)
   }
 
-  const handleDelete = async (event: any) => {
-    try {
-        const res = await fetch(`http://localhost:4000/posts/${event.id}`, {
-            method: "DELETE",
-            headers: {
-              "Authorization": token && token.accessToken ? `Bearer ${token.accessToken}` : '',
-            },
-          });
-          if (res.ok) {
-            await res.json().then(data => {
-              // Update state to remove the deleted post
-              const updatedPosts = posts.filter(post => post.id !== data.id);
-              setPosts(updatedPosts);
+  // const handleDelete = async (event: any) => {
+  //   setOpen(true)
+  //   try {
+  //       const res = await fetch(`http://localhost:4000/posts/${event.id}`, {
+  //           method: "DELETE",
+  //           headers: {
+  //             "Authorization": token && token.accessToken ? `Bearer ${token.accessToken}` : '',
+  //           },
+  //         });
+  //         if (res.ok) {
+  //           await res.json().then(data => {
+  //             // Update state to remove the deleted post
+  //             const updatedPosts = posts.filter(post => post.id !== data.id);
+  //             setPosts(updatedPosts);
 
-              // Update localStorage to remove the deleted post
-              const storedAllPosts = localStorage.getItem('posts');
-              const allPosts = storedAllPosts ? JSON.parse(storedAllPosts) : null;
+  //             // Update localStorage to remove the deleted post
+  //             const storedAllPosts = localStorage.getItem('posts');
+  //             const allPosts = storedAllPosts ? JSON.parse(storedAllPosts) : null;
   
-              if (storedAllPosts) {
-                const updatedLocalStoragePosts = allPosts.filter((post: any) => post.id !== data.id);
-                localStorage.setItem('posts', JSON.stringify(updatedLocalStoragePosts));
-              }
+  //             if (storedAllPosts) {
+  //               const updatedLocalStoragePosts = allPosts.filter((post: any) => post.id !== data.id);
+  //               localStorage.setItem('posts', JSON.stringify(updatedLocalStoragePosts));
+  //             }
 
-              const storedPosts = localStorage.getItem('userPosts');
-              const userAllPosts = storedPosts ? JSON.parse(storedPosts) : null;
+  //             const storedPosts = localStorage.getItem('userPosts');
+  //             const userAllPosts = storedPosts ? JSON.parse(storedPosts) : null;
   
-              if (userAllPosts) {
-                const updatedLocalStoragePosts = userAllPosts.filter((post: any) => post.id !== data.id);
-                localStorage.setItem('userPosts', JSON.stringify(updatedLocalStoragePosts));
-              }
+  //             if (userAllPosts) {
+  //               const updatedLocalStoragePosts = userAllPosts.filter((post: any) => post.id !== data.id);
+  //               localStorage.setItem('userPosts', JSON.stringify(updatedLocalStoragePosts));
+  //             }
 
-            })
-          }
-    } catch (error) {
-        console.log("Error during deleting post: ", error);
-    }
-  }
+  //           })
+  //         }
+  //   } catch (error) {
+  //       console.log("Error during deleting post: ", error);
+  //   }
+  // }
   
-  const handleEdit = async(event: any) => {
-    setEditPost({
-      id: event.id,
-      title: event.title,
-      content: event.content,
-      created_at: event.created_at,
-      updated_at: event.updated_at
-    })
-    router.push('/update')
-  }
+  // const handleEdit = async(event: any) => {
+  //   setEditPost({
+  //     id: event.id,
+  //     title: event.title,
+  //     content: event.content,
+  //     created_at: event.created_at,
+  //     updated_at: event.updated_at
+  //   })
+  //   router.push('/update')
+  // }
   
   return (
     <>
-      <div className='p-10 bg-deep-header'>
-        <h1 className='text-center font-mono' style={{fontSize:"2rem"}}>...ALL POSTS...</h1>
-      </div>
-      <div className='bg-font-blue h-auto'>
-        <div className='grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
-          { posts.length ?  
-              posts.map((post, index) =>
-                <PostCard key={index} post={post} handleClick={handleClick} username={user.username} handleDelete={handleDelete} handleEdit={handleEdit}/> 
-              ) :
-              <h1 className='mx-auto'>No posts yet...</h1>
-          }
+   {token.accessToken ? 
+      <>
+        <div className='p-10 bg-deep-header'>
+          <h1 className='text-center font-mono' style={{fontSize:"2rem"}}>...ALL POSTS...</h1>
         </div>
-      </div>
-      <div className='p-5 bg-deep-header text-center'>
-        <Link href="/dashboard" className='font-mono hover:outline-double'>...Back home...</Link>
-      </div>
+        <div className='bg-font-blue h-auto'>
+          <div className='grid sm:grid-cols-4 md-grid-cols-2 grid-cols-1 gap-5 p-20'>
+            { posts.length ?  
+                posts.map((post, index) =>
+                  <PostCard key={index} post={post} handleClick={handleClick} username={user.username} /> 
+                ) :
+                <h1 className='mx-auto'>No posts yet...</h1>
+            }
+          </div>
+          {/* {
+            open ? 
+              <Alert open={open} onClose={() => setOpen(false)} className='bg-alert-delete w-1/4'>
+                Post had been deleted successfully! 
+              </Alert> :
+              null
+          }   */}
+        </div>
+        <div className='p-5 bg-deep-header text-center'>
+          <Link href="/dashboard" className='font-mono hover:outline-double'>...Back home...</Link>
+        </div>   
+      </> :
+      <Loading /> 
+    }
     </>
   )
 }
